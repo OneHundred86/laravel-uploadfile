@@ -4,6 +4,8 @@
 ```shell
 composer require oh86/laravel-uploadfile
 php artisan vendor:publish --provider="Oh86\UploadFile\UploadFileServiceProvider"
+
+php artisan migrate
 ```
 
 #### 2.配置`config/uploadfile.php`
