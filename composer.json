@@ -1,0 +1,30 @@
+{
+    "name": "oh86/laravel-uploadfile",
+    "description": "upload/download/view file with laravel framework",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Oh86\\UploadFile\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "chengj",
+            "email": "chen.gj@qq.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "laravel/framework": "*",
+        "oh86/sm_cryptor": "*",
+        "oh86/laravel-http-tools": "*"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Oh86\\UploadFile\\UploadFileServiceProvider"
+            ]
+        }
+    }
+}
