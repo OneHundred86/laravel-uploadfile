@@ -13,6 +13,7 @@ return [
         'xlsx',
     ],
 
+    'app_url' => env('UPLOADFILE_APP_URL', env('APP_URL')),
     'view_file_uri' => 'file/view',
 
     'routes' => [

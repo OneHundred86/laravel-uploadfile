@@ -85,7 +85,7 @@ class File extends Model
 
         return sprintf(
             '%s/%s?%s',
-            config('app.url'),
+            config('uploadfile.app_url'),
             ltrim(config('uploadfile.view_file_uri'), '/'),
             http_build_query([
                 'id' => $this->id,
