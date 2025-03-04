@@ -52,7 +52,7 @@ class File extends Model
         $path = rtrim($storePathPrefix, '/') . sprintf(
             '/%s/%s',
             date('Ymd'),
-            $ext ? sm3($content) . ".$ext" : sm3($content),
+            $ext ? hash('sha256', $content) . ".$ext" : hash('sha256', $content),
         );
         $path = ltrim($path, '/');
         Storage::disk($storage)->put($path, $content);
