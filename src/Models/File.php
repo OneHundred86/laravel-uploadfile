@@ -98,8 +98,11 @@ class File extends Model
 
     /**
      * 设置关联资源信息
+     * 
+     * @param string|null $type
+     * @param int|null $id
      */
-    public function setAssocInfo(string $type, int $id)
+    public function setAssocInfo($type, $id)
     {
         $this->update([
             'assoc_type' => $type,
