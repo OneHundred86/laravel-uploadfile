@@ -39,6 +39,23 @@ class FileController
     {
         $request->validate([
             'id' => 'required',
+        ]);
+
+        $file = File::findOrFail($request->id);
+
+        return new Response(
+            $file->content,
+            200,
+            [
+                'content-type' => $file->mime_type,
+            ]
+        );
+    }
+
+    public function tmpView(Request $request)
+    {
+        $request->validate([
+            'id' => 'required',
             'expiredAt' => 'required|int',
             'random' => 'required',
             'sign' => 'required',

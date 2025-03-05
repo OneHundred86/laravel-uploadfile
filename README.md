@@ -25,9 +25,11 @@ return [
     ],
 
     // 配置查看文件路由路径
+    'app_url' => env('UPLOADFILE_APP_URL', env('APP_URL')),
     'view_file_uri' => 'file/view',
+    'tmp_view_file_uri' => 'file/tmp/view',
 
-    // 配置路由
+    // 按业务需求暴露路由路径
     'routes' => [
         [
             'method' => 'post',
@@ -37,8 +39,8 @@ return [
         ],
         [
             'method' => 'get',
-            'uri' => 'file/view',
-            'action' => [\Oh86\UploadFile\Controllers\FileController::class, 'view'],
+            'uri' => 'file/tmp/view',
+            'action' => [\Oh86\UploadFile\Controllers\FileController::class, 'tmpView'],
             'middlewares' => [],
         ],
         [
@@ -59,6 +61,7 @@ use Oh86\UploadFile\Models\File;
 $file = File::upload(new \SplFileInfo('/xxx/target_file.txt'));
 
 // 获取查看url
+$url = $file->genTmpViewFileUrl();
 $url = $file->genViewFileUrl();
 
 // 标记关联资源

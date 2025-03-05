@@ -78,7 +78,12 @@ class File extends Model
         return Storage::disk($this->storage)->get($this->path);
     }
 
-    public function genViewFileUrl(int $validSeconds = 3600)
+    /**
+     * 生成临时查看地址
+     * @param int $validSeconds
+     * @return string
+     */
+    public function genTmpViewFileUrl(int $validSeconds = 3600)
     {
         $random = Str::random(8);
         $expiredAt = time() + $validSeconds;
@@ -86,13 +91,27 @@ class File extends Model
         return sprintf(
             '%s/%s?%s',
             config('uploadfile.app_url'),
-            ltrim(config('uploadfile.view_file_uri'), '/'),
+            ltrim(config('uploadfile.tmp_view_file_uri'), '/'),
             http_build_query([
                 'id' => $this->id,
                 'expiredAt' => $expiredAt,
                 'random' => $random,
                 'sign' => static::genViewFileSignature($this->id, $expiredAt, $random),
             ])
+        );
+    }
+
+    /**
+     * 生成永久查看地址
+     * @return string 
+     */
+    public function genViewFileUrl()
+    {
+        return sprintf(
+            '%s/%s?%s',
+            config('uploadfile.app_url'),
+            ltrim(config('uploadfile.view_file_uri'), '/'),
+            http_build_query(['id' => $this->id]),
         );
     }
 
