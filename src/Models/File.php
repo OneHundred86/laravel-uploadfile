@@ -5,6 +5,7 @@ namespace Oh86\UploadFile\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Oh86\SmCryptor\Facades\Cryptor;
@@ -68,7 +69,13 @@ class File extends Model
         ]);
     }
 
-    public static function genViewFileSignature(string $fileId, int $expiredAt, string $random)
+    /**
+     * @param string $fileId
+     * @param int|null $expiredAt
+     * @param string $random
+     * @return string
+     */
+    public static function genViewFileSignature($fileId, $expiredAt, $random)
     {
         return Cryptor::hmacSm3(sprintf('%s%s%s', $fileId, $expiredAt, $random));
     }
@@ -86,7 +93,7 @@ class File extends Model
     public function genTmpViewFileUrl(int $validSeconds = 3600)
     {
         $random = Str::random(8);
-        $expiredAt = time() + $validSeconds;
+        $expiredAt = Carbon::now()->timestamp + $validSeconds;
 
         return sprintf(
             '%s/%s?%s',
@@ -107,11 +114,17 @@ class File extends Model
      */
     public function genViewFileUrl()
     {
+        $random = Str::random(8);
+
         return sprintf(
             '%s/%s?%s',
             config('uploadfile.app_url'),
             ltrim(config('uploadfile.view_file_uri'), '/'),
-            http_build_query(['id' => $this->id]),
+            http_build_query([
+                'id' => $this->id,
+                'random' => $random,
+                'sign' => static::genViewFileSignature($this->id, null, $random),
+            ]),
         );
     }
 

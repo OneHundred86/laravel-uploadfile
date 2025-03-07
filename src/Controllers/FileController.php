@@ -2,6 +2,7 @@
 
 namespace Oh86\UploadFile\Controllers;
 
+use Illuminate\Support\Carbon;
 use Oh86\UploadFile\Models\File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -39,9 +40,16 @@ class FileController
     {
         $request->validate([
             'id' => 'required',
+            'random' => 'required',
+            'sign' => 'required',
         ]);
 
         $file = File::findOrFail($request->id);
+
+        throw_if(
+            File::genViewFileSignature($request->id, null, $request->random) != $request->sign,
+            new ErrorCodeException(403, '签名错误', null, 403),
+        );
 
         return new Response(
             $file->content,
@@ -62,7 +70,7 @@ class FileController
         ]);
 
         throw_if(
-            now()->getTimestamp() > $request->expiredAt,
+            Carbon::now()->getTimestamp() > $request->expiredAt,
             new ErrorCodeException(403, '已过期', null, 403)
         );
 
