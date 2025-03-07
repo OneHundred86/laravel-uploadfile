@@ -14,6 +14,9 @@ return [
         'xlsx',
     ],
 
+    // 加密机
+    'encryptor' => env('UPLOADFILE_ENCRYPTOR', 'local'),
+
     // 配置查看文件路由路径
     'app_url' => env('UPLOADFILE_APP_URL', env('APP_URL')),
     'view_file_uri' => 'file/view',

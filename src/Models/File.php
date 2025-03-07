@@ -77,7 +77,7 @@ class File extends Model
      */
     public static function genViewFileSignature($fileId, $expiredAt, $random)
     {
-        return Cryptor::hmacSm3(sprintf('%s%s%s', $fileId, $expiredAt, $random));
+        return Cryptor::driver(config('uploadfile.encryptor'))->hmacSm3(sprintf('%s%s%s', $fileId, $expiredAt, $random));
     }
 
     public function getContentAttribute()
