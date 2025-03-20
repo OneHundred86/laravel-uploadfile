@@ -11,16 +11,51 @@ use Oh86\Http\Exceptions\ErrorCodeException;
 
 class FileController
 {
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return OkResponse
+     */
     public function upload(Request $request)
     {
         $request->validate([
-            "file" => "required|file",
+            'file' => 'required|file',
         ]);
 
         $uploadFile = $request->file("file");
 
         $this->checkUploadFile($uploadFile);
         $file = File::upload($uploadFile, 'uploadFiles');
+
+        return new OkResponse($file);
+    }
+
+    /**
+     * 上传文件并返回查看地址（慎用）
+     * @param \Illuminate\Http\Request $request
+     * @return OkResponse
+     */
+    protected function uploadAndView(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file',
+            'with_url' => 'boolean',
+            'with_tmp_url' => 'boolean',
+        ]);
+
+        $uploadFile = $request->file("file");
+
+        $this->checkUploadFile($uploadFile);
+        $file = File::upload($uploadFile, 'uploadFiles');
+
+        if ($request->with_url) {
+            $file->url = $file->genViewFileUrl();
+        }
+
+        if ($request->with_tmp_url) {
+            $file->tmp_url = $file->genTmpViewFileUrl();
+        }
+
+        $file->setVisible(['id', 'name', 'mime_type', 'url', 'tmp_url']);
 
         return new OkResponse($file);
     }
