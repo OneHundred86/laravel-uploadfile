@@ -34,7 +34,7 @@ class FileController
      * @param \Illuminate\Http\Request $request
      * @return OkResponse
      */
-    protected function uploadAndView(Request $request)
+    public function uploadAndView(Request $request)
     {
         $request->validate([
             'file' => 'required|file',
