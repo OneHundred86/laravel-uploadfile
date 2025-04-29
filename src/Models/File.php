@@ -39,7 +39,7 @@ class File extends Model
     {
         if ($file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
             $name = $file->getClientOriginalName();
-            $mimeType = $file->getClientMimeType();
+            $mimeType = $file->getMimeType();
             $content = $file->getContent();
             $ext = $file->guessExtension();
         } elseif ($file instanceof \SplFileInfo) {
